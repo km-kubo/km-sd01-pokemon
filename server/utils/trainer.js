@@ -22,7 +22,6 @@ export const findTrainers = async () => {
 /** トレーナーの取得 */
 // TODO: トレーナーを取得する S3 クライアント処理の実装
 export const getTrainer = async (name) => {
-  console.log(name);
   const result = await s3Client.send(
     new GetObjectCommand({
       Bucket: config.bucketName,
@@ -30,20 +29,19 @@ export const getTrainer = async (name) => {
     })
   );
   const bodyContents = await streamToString(result.Body)
-  console.log("getTrainer result", bodyContents);
   return JSON.parse(bodyContents);
 };
 
 /** トレーナーの追加更新 */
 export const upsertTrainer = async (name, trainer) => {
+  console.log(JSON.stringify({ name, pokemons: [], ...trainer }));
   const result = await s3Client.send(
     new PutObjectCommand({
       Bucket: config.bucketName,
       Key: `${name}.json`,
-      Body: JSON.stringify({ name: "", pokemons: [], ...trainer }),
+      Body: JSON.stringify({ name, pokemons: [], ...trainer }),
     })
   );
-  console.log('result;',result);
   return result;
 };
 
@@ -56,6 +54,5 @@ export const deleteTrainer = async (name) => {
       Key: `${name}.json`,
     })
   );
-  console.log('result;',result);
   return result;
 };
