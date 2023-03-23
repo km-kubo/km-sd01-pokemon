@@ -10,6 +10,7 @@ const response = await fetch("https://pokeapi.co/api/v2/pokemon/", {
 });
 const pokemons = await response.json();
 const onCatch = async (pokemon) => {
+    console.log(pokemon);
     const response = await fetch(
         `${config.backendOrigin}/api/trainer/${route.params.name}/pokemon/${pokemon.name}`,
         {
